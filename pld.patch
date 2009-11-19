@@ -5,7 +5,7 @@
  		<div style='border: 1px solid #ccc'>
  			<p style='font-weight: bold; padding-left: 10px'>One or more of the directories must be made writeable by the webserver. You will be reminded to reset the permissions at the end of the install.<br />
 -				Please <code>chmod 777 <q>directory-name</q></code> or <code>chown</code> that directory to the user the web server runs as (usually nobody, apache, or www-data)<br />
-+				Please <code>chmod 777 <q>directory-name</q></code> or <code>chown</code> that directory to the user the web server runs as (usually "nobody", "apache", or "www-data", "http" in PLD Linux)<br />
++				Please <code>chmod 777 <q>directory-name</q></code> or <code>chown</code> that directory to the user the web server runs as (usually "nobody", "apache", or "www-data"; It is "http" in PLD Linux)<br />
  				Refresh this page when you're done!<br /></p>
  		</div>
  		<p>Quick fix:<br /> <code>chmod&nbsp;777&nbsp;<?php
