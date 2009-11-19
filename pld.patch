@@ -9,3 +9,14 @@
  				Refresh this page when you're done!<br /></p>
  		</div>
  		<p>Quick fix:<br /> <code>chmod&nbsp;777&nbsp;<?php
+--- wordpress-mu-2.8.6/index-install.php~	2009-11-19 16:54:08.000000000 +0200
++++ wordpress-mu-2.8.6/index-install.php	2009-11-19 16:55:38.075995166 +0200
+@@ -359,7 +359,7 @@
+ 	return true;
+ }
+ 
+-function printstep1form( $dbname = 'wordpress', $uname = 'username', $pwd = 'password', $dbhost = 'localhost', $vhost = 'yes', $prefix = 'wp_' ) {
++function printstep1form( $dbname = 'wordpress', $uname = 'mysql', $pwd = '', $dbhost = 'localhost', $vhost = 'yes', $prefix = 'wp_' ) {
+ 	$weblog_title = ucfirst( $_SERVER[ 'HTTP_HOST' ] ) . ' Blogs';
+ 	$email = '';
+ 	$hostname = $_SERVER[ 'HTTP_HOST' ];
