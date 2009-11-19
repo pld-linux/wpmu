@@ -4,13 +4,14 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wordpress-mu
 Version:	2.8.6
-Release:	0.10
+Release:	0.11
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
 # Source0-md5:	dfa27af33afe0c206933e509edd5835c
 URL:		http://mu.wordpress.org/
 Source1:	apache.conf
+Patch0:		pld.patch
 Source2:	lighttpd.conf
 Requires:	php-gettext
 Requires:	php-mysql
@@ -58,7 +59,9 @@ MU po pierwszej instalacji. Potem należy go odinstalować, jako że
 pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
 %prep
-%setup -q -n %{name}
+%setup -qc
+mv %{name}/* .; rmdir %{name}
+%patch0 -p1
 
 rm wp-content/themes/index.php
 rm wp-content/mu-plugins/index.php
@@ -70,7 +73,7 @@ find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-content/languages}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/languages}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
 cp -a wp-config-sample.php $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
@@ -148,10 +151,14 @@ fi
 %{_appdir}/wp-content/themes/default
 %{_appdir}/wp-content/themes/home
 
+# -setup package
+%exclude %{_appdir}/index-install.php
+
 %files setup
 %defattr(644,root,root,755)
-#%attr(755,root,root) %{_bindir}/wp-secure
-#%attr(755,root,root) %{_bindir}/wp-setup
+#%attr(755,root,root) %{_sbindir}/wpmu-secure
+#%attr(755,root,root) %{_sbindir}/wpmu-setup
 #%{_appdir}/wp-secure.sh
 #%{_appdir}/wp-setup.sh
 %{_appdir}/wp-admin
+%{_appdir}/index-install.php
