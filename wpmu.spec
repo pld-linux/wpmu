@@ -2,14 +2,16 @@
 # - gettext mo to system dir, add all possible languages?
 Summary:	WordPress MU
 Name:		wordpress-mu
-Version:	2.8.5.2
-Release:	1.6
+Version:	2.8.6
+Release:	0.9
 License:	GPL
 Group:		Applications/Publishing
 #Source0:	http://mu.wordpress.org/latest.tar.gz
 Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
-# Source0-md5:	7d733e276cb5983f58a39365bc97b81e
+# Source0-md5:	dfa27af33afe0c206933e509edd5835c
 URL:		http://mu.wordpress.org/
+Source1:	apache.conf
+Source2:	lighttpd.conf
 Requires:	php-gettext
 Requires:	php-mysql
 Requires:	php-pcre
@@ -62,6 +64,9 @@ install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-co
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
 cp -a wp-config-sample.php $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
+cp -a $RPM_BUILD_ROOT%{_sysconfdir}/{apache,httpd}.conf
 rm $RPM_BUILD_ROOT%{_appdir}/htaccess.dist
 
 %clean
@@ -75,7 +80,7 @@ if [ "$1" = 1 ]; then
 	1) Create some MySQL database owned by some user
 	2) Edit the file: %{_sysconfdir}/wp-config.php
 	3) Install %{name}-setup
-	4) Run a browser and visit: http://`hostname`/wordpress/wp-admin/install.php
+	4) Run a browser and visit: http://$(hostname)/wordpress/wp-admin/install.php
 EOF
 fi
 
@@ -110,9 +115,9 @@ fi
 %files
 %defattr(644,root,root,755)
 %dir %attr(750,root,http) %{_sysconfdir}
-#%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
-#%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
-#%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/wp-config.php
 
 %{_appdir}/README.txt
