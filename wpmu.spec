@@ -1,12 +1,12 @@
 # TODO
 # - gettext mo to system dir, add all possible languages?
 Summary:	WordPress MU
+Summary(en.UTF-8):	WordPress µ
 Name:		wordpress-mu
 Version:	2.8.6
-Release:	0.9
+Release:	0.10
 License:	GPL
 Group:		Applications/Publishing
-#Source0:	http://mu.wordpress.org/latest.tar.gz
 Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
 # Source0-md5:	dfa27af33afe0c206933e509edd5835c
 URL:		http://mu.wordpress.org/
@@ -31,14 +31,24 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 WordPress MU, or multi-user is WordPress port of having hundreds of
 thousands of blogs with a single install of WordPress.
 
+%description -l en.UTF-8
+WordPress µ, or multi-user is WordPress port of having hundreds of
+thousands of blogs with a single install of WordPress.
+
 %package setup
 Summary:	Wordpress MU setup package
+Summary(en.UTF-8):	Wordpress µ setup package
 Summary(pl.UTF-8):	Pakiet do wstępnej konfiguracji Wordpress
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
 
 %description setup
 Install this package to configure initial WordPress MU installation.
+You should uninstall this package when you're done, as it considered
+insecure to keep the setup files in place.
+
+%description setup -l en.UTF-8
+Install this package to configure initial WordPress µ installation.
 You should uninstall this package when you're done, as it considered
 insecure to keep the setup files in place.
 
