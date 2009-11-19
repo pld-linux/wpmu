@@ -1,6 +1,6 @@
---- wordpress-mu-2.8.6/index-install.php~	2009-11-19 14:39:53.000000000 +0200
-+++ wordpress-mu-2.8.6/index-install.php	2009-11-19 14:42:58.870091243 +0200
-@@ -288,7 +288,7 @@
+--- wordpress-mu-2.8.6/index-install.php	2009-11-19 17:28:48.623647566 +0200
++++ wordpress-mu-2.8.6.pld/index-install.php	2009-11-19 17:28:33.183056898 +0200
+@@ -288,10 +288,16 @@
  		<h2>Warning!</h2>
  		<div style='border: 1px solid #ccc'>
  			<p style='font-weight: bold; padding-left: 10px'>One or more of the directories must be made writeable by the webserver. You will be reminded to reset the permissions at the end of the install.<br />
@@ -8,15 +8,54 @@
 +				Please <code>chmod 777 <q>directory-name</q></code> or <code>chown</code> that directory to the user the web server runs as (usually "nobody", "apache", or "www-data"; It is "http" in PLD Linux)<br />
  				Refresh this page when you're done!<br /></p>
  		</div>
- 		<p>Quick fix:<br /> <code>chmod&nbsp;777&nbsp;<?php
---- wordpress-mu-2.8.6/index-install.php~	2009-11-19 16:54:08.000000000 +0200
-+++ wordpress-mu-2.8.6/index-install.php	2009-11-19 16:55:38.075995166 +0200
-@@ -359,7 +359,7 @@
+-		<p>Quick fix:<br /> <code>chmod&nbsp;777&nbsp;<?php
++		<p>Quick fix:<br />
++	   	<code>chgrp&nbsp;http&nbsp;<?php
++		foreach( $errors as $dir ) {
++			echo "$dir&nbsp;";
++		}
++		?></code>
++	   	<code>chmod&nbsp;g+w&nbsp;<?php
+ 		foreach( $errors as $dir ) {
+ 			echo "$dir&nbsp;";
+ 		}
+@@ -359,7 +365,7 @@
  	return true;
  }
  
 -function printstep1form( $dbname = 'wordpress', $uname = 'username', $pwd = 'password', $dbhost = 'localhost', $vhost = 'yes', $prefix = 'wp_' ) {
-+function printstep1form( $dbname = 'wordpress', $uname = 'mysql', $pwd = '', $dbhost = 'localhost', $vhost = 'yes', $prefix = 'wp_' ) {
++function printstep1form( $dbname = 'wpmu', $uname = 'mysql', $pwd = '', $dbhost = 'localhost', $vhost = 'yes', $prefix = 'wp_' ) {
  	$weblog_title = ucfirst( $_SERVER[ 'HTTP_HOST' ] ) . ' Blogs';
  	$email = '';
  	$hostname = $_SERVER[ 'HTTP_HOST' ];
+@@ -630,6 +636,14 @@
+ 	</p>
+ 	<p>You can probably use the following command to fix the permissions but check with your host if it doubt:
+ 		<br />
++		<code>chown&nbsp;root&nbsp;
++			<?php
++			reset( $dirs );
++			foreach( (array) $dirs as $dir ) {
++				echo "$dir&nbsp;";
++			}
++			?>
++		</code><br />
+ 		<code>chmod&nbsp;755&nbsp;
+ 			<?php
+ 			reset( $dirs );
+--- wordpress-mu-2.8.6/wp-blog-header.php	2009-11-19 17:28:48.952408338 +0200
++++ wordpress-mu-2.8.6.pld/wp-blog-header.php	2009-11-19 17:28:33.183056898 +0200
+@@ -10,8 +10,11 @@
+ 	if ( !file_exists( dirname(__FILE__) . '/wp-config.php') && !file_exists( dirname( dirname(__FILE__) ) . '/wp-config.php')) {
+ 		if (strpos($_SERVER['PHP_SELF'], 'wp-admin') !== false) $path = '';
+ 		else $path = 'wp-admin/';
+-		include( "index-install.php" ); // install WPMU!
+-		die();
++		// install WPMU!
++		if (include("index-install.php")) {
++			exit;
++		}
++		die('Please install <code>wordpress-mu-setup</code> package to run install wizard');
+ 	}
+ 
+ 	$wp_did_header = true;

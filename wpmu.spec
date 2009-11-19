@@ -4,7 +4,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wordpress-mu
 Version:	2.8.6
-Release:	0.11
+Release:	0.24
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
@@ -61,6 +61,9 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 %prep
 %setup -qc
 mv %{name}/* .; rmdir %{name}
+# undos
+find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
+
 %patch0 -p1
 
 rm wp-content/themes/index.php
@@ -69,18 +72,19 @@ rm wp-content/mu-plugins/readme.txt
 rm wp-content/plugins/index.php
 rm wp-content/plugins/readme.txt
 
-find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/languages}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
-cp -a wp-config-sample.php $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
+cp -a $RPM_BUILD_ROOT{%{_appdir}/wp-config-sample.php,%{_sysconfdir}/wp-config.php}
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 cp -a $RPM_BUILD_ROOT%{_sysconfdir}/{apache,httpd}.conf
-rm $RPM_BUILD_ROOT%{_appdir}/htaccess.dist
+rm $RPM_BUILD_ROOT%{_appdir}/{README.txt,license.txt}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -88,23 +92,26 @@ rm -rf $RPM_BUILD_ROOT
 %post
 if [ "$1" = 1 ]; then
 	%banner -e %{name} <<-EOF
-	To finish your configuration DO NOT FORGET to:
+	To setup configuration using web wizard:
 
-	1) Create some MySQL database owned by some user
-	2) Edit the file: %{_sysconfdir}/wp-config.php
-	3) Install %{name}-setup
-	4) Run a browser and visit: http://$(hostname)/wordpress/wp-admin/install.php
+	- Install %{name}-setup
+	- Create empty MySQL database (mysqladmin create wpmu)
+	- Open web browser at: http://$(hostname)/wordpress/wp-admin/install.php
 EOF
 fi
 
 %post setup
 chmod 660 %{_sysconfdir}/wp-config.php
 chown root:http %{_sysconfdir}/wp-config.php
+chmod 775 %{_appdir} %{_appdir}/wp-content
+chown root:http %{_appdir} %{_appdir}/wp-content
 
 %postun setup
 if [ "$1" = "0" ]; then
 	chmod 640 %{_sysconfdir}/wp-config.php
 	chown root:http %{_sysconfdir}/wp-config.php
+	chmod 755 %{_appdir} %{_appdir}/wp-content
+	chown root:root %{_appdir} %{_appdir}/wp-content
 fi
 
 %triggerin -- apache1 < 1.3.37-3, apache1-base
@@ -127,14 +134,13 @@ fi
 
 %files
 %defattr(644,root,root,755)
+%doc README.txt license.txt
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/wp-config.php
 
-%{_appdir}/README.txt
-%{_appdir}/license.txt
 %{_appdir}/wp-content/blogs.php
 
 %dir %{_appdir}
@@ -153,6 +159,7 @@ fi
 
 # -setup package
 %exclude %{_appdir}/index-install.php
+%exclude %{_appdir}/wp-config-sample.php
 
 %files setup
 %defattr(644,root,root,755)
@@ -160,5 +167,7 @@ fi
 #%attr(755,root,root) %{_sbindir}/wpmu-setup
 #%{_appdir}/wp-secure.sh
 #%{_appdir}/wp-setup.sh
-%{_appdir}/wp-admin
+%{_appdir}/htaccess.dist
 %{_appdir}/index-install.php
+%{_appdir}/wp-config-sample.php
+%{_appdir}/wp-admin
