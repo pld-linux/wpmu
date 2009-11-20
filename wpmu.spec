@@ -4,7 +4,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wordpress-mu
 Version:	2.8.6
-Release:	0.24
+Release:	0.25
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
@@ -77,7 +77,7 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/languages}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/{languages,blogs.dir}}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
 cp -a $RPM_BUILD_ROOT{%{_appdir}/wp-config-sample.php,%{_sysconfdir}/wp-config.php}
@@ -156,6 +156,8 @@ fi
 %{_appdir}/wp-content/themes/classic
 %{_appdir}/wp-content/themes/default
 %{_appdir}/wp-content/themes/home
+
+%attr(775,root,http) %{_appdir}/wp-content/blogs.dir
 
 # -setup package
 %exclude %{_appdir}/index-install.php
