@@ -4,7 +4,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wordpress-mu
 Version:	2.8.6
-Release:	0.25
+Release:	0.29
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
@@ -12,7 +12,9 @@ Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
 URL:		http://mu.wordpress.org/
 Source1:	apache.conf
 Patch0:		pld.patch
+Patch1:		wp_queries.patch
 Source2:	lighttpd.conf
+BuildRequires:	/usr/bin/php
 Requires:	php-gettext
 Requires:	php-mysql
 Requires:	php-pcre
@@ -71,9 +73,19 @@ rm wp-content/mu-plugins/index.php
 rm wp-content/mu-plugins/readme.txt
 rm wp-content/plugins/index.php
 rm wp-content/plugins/readme.txt
+rm wp-content/index.php
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+
+# Extract $wp_queries to separate file so these could be re-loaded when blog changes
+sed -ne '/global $wp_queries;/,/WP_FIRST_INSTALL$/p' wp-admin/includes/schema.php > wp-admin/includes/schema-wp_queries.php
+sed -i -e '/global $wp_queries;/,/WP_FIRST_INSTALL$/d' wp-admin/includes/schema.php
+%patch1 -p1
+
+%build
+php -l wp-admin/includes/schema.php
+php -l wp-admin/includes/schema-wp_queries.php
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -146,7 +158,6 @@ fi
 %dir %{_appdir}
 %{_appdir}/*.php
 %{_appdir}/wp-includes
-%{_appdir}/wp-content/index.php
 %dir %{_appdir}/wp-content
 %dir %{_appdir}/wp-content/languages
 %dir %{_appdir}/wp-content/plugins
