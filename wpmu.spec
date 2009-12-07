@@ -4,7 +4,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wordpress-mu
 Version:	2.8.6
-Release:	0.34
+Release:	0.36
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
@@ -91,7 +91,7 @@ php -l wp-admin/includes/schema-wp_queries.php
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/{languages,blogs.dir}}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/languages,/var/lib/wpmu}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
 touch $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
@@ -110,22 +110,18 @@ if [ "$1" = 1 ]; then
 
 	- Install %{name}-setup
 	- Create empty MySQL database (mysqladmin create wpmu)
-	- Open web browser at: http://$(hostname)/wordpress/wp-admin/install.php
+	- Open web browser at: http://$(hostname)/wpmu/index.php
 EOF
 fi
 
 %post setup
 chmod 660 %{_sysconfdir}/wp-config.php
 chown root:http %{_sysconfdir}/wp-config.php
-chmod 775 %{_appdir} %{_appdir}/wp-content
-chown root:http %{_appdir} %{_appdir}/wp-content
 
 %postun setup
 if [ "$1" = "0" ]; then
 	chmod 640 %{_sysconfdir}/wp-config.php
 	chown root:http %{_sysconfdir}/wp-config.php
-	chmod 755 %{_appdir} %{_appdir}/wp-content
-	chown root:root %{_appdir} %{_appdir}/wp-content
 fi
 
 %triggerin -- apache1 < 1.3.37-3, apache1-base
@@ -170,7 +166,7 @@ fi
 %{_appdir}/wp-content/themes/default
 %{_appdir}/wp-content/themes/home
 
-%attr(775,root,http) %{_appdir}/wp-content/blogs.dir
+%attr(775,root,http) /var/lib/wpmu
 
 # -setup package
 %exclude %{_appdir}/index-install.php

@@ -121,3 +121,55 @@
  
  /** Sets up WordPress vars and included files. */
  require_once(ABSPATH . 'wp-settings.php');
+--- wordpress-mu/wp-settings.php~	2009-12-07 22:02:50.000000000 +0200
++++ wordpress-mu/wp-settings.php	2009-12-07 22:25:35.955516316 +0200
+@@ -322,13 +322,13 @@
+ }
+ 
+ if( !defined( "UPLOADBLOGSDIR" ) )
+-	define( "UPLOADBLOGSDIR", 'wp-content/blogs.dir' );
++	define( "UPLOADBLOGSDIR", '/var/lib/wpmu' );
+ 
+ if( !defined( "UPLOADS" ) )
+ 	define( "UPLOADS", UPLOADBLOGSDIR . "/{$wpdb->blogid}/files/" );
+ 
+ if( !defined( "BLOGUPLOADDIR" ) )
+-	define( "BLOGUPLOADDIR", WP_CONTENT_DIR . "/blogs.dir/{$wpdb->blogid}/files/" );
++	define( "BLOGUPLOADDIR", "/var/lib/wpmu/{$wpdb->blogid}/files/" );
+ 
+ require (ABSPATH . WPINC . '/plugin.php');
+ require (ABSPATH . WPINC . '/default-filters.php');
+--- wordpress-mu/wp-admin/includes/mu.php~	2009-12-07 22:28:25.000000000 +0200
++++ wordpress-mu/wp-admin/includes/mu.php	2009-12-07 22:28:26.985115629 +0200
+@@ -52,7 +52,7 @@
+ 			$wpdb->query( "DROP TABLE IF EXISTS ". current( $drop_table ) ."" );
+ 		}
+ 		$wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->blogs WHERE blog_id = %d", $blog_id) );
+-		$dir = apply_filters( 'wpmu_delete_blog_upload_dir', constant( "WP_CONTENT_DIR" ) . "/blogs.dir/{$blog_id}/files/", $blog_id );
++		$dir = apply_filters( 'wpmu_delete_blog_upload_dir', "/var/lib/wpmu/{$blog_id}/files/", $blog_id );
+ 		$dir = rtrim($dir, DIRECTORY_SEPARATOR);
+ 		$top_dir = $dir;
+ 		$stack = array($dir);
+--- wordpress-mu/./wp-includes/wpmu-functions.php~	2009-12-07 22:02:50.000000000 +0200
++++ wordpress-mu/./wp-includes/wpmu-functions.php	2009-12-07 22:29:17.955090675 +0200
+@@ -1410,7 +1410,7 @@
+ 	update_option('siteurl', $url);
+ 	update_option('home', $url);
+ 	update_option('fileupload_url', $url . "files" );
+-	update_option('upload_path', "wp-content/blogs.dir/" . $blog_id . "/files");
++	update_option('upload_path', "/var/lib/wpmu/" . $blog_id . "/files");
+ 	update_option('blogname', stripslashes( $blog_title ) );
+ 	update_option('admin_email', '');
+ 	$wpdb->update( $wpdb->options, array('option_value' => ''), array('option_name' => 'admin_email') );
+--- wordpress-mu/./index-install.php~	2009-12-07 22:02:50.000000000 +0200
++++ wordpress-mu/./index-install.php	2009-12-07 22:29:54.208431939 +0200
+@@ -351,9 +351,6 @@
+ 		return false;
+ 	}
+ 
+-	// Create Blogs living area.
+-	@mkdir( dirname(__FILE__) . "/wp-content/blogs.dir", 0777 );
+-
+ 	$url = stripslashes( "http://".$_SERVER["SERVER_NAME"] . dirname( $_SERVER[ "SCRIPT_NAME" ] ) );
+ 	if( substr( $url, -1 ) == '/' )
+ 		$url = substr( $url, 0, -1 );
