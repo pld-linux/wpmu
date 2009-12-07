@@ -4,7 +4,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wordpress-mu
 Version:	2.8.6
-Release:	0.29
+Release:	0.34
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
@@ -13,6 +13,7 @@ URL:		http://mu.wordpress.org/
 Source1:	apache.conf
 Patch0:		pld.patch
 Patch1:		wp_queries.patch
+Patch2:		configpath.patch
 Source2:	lighttpd.conf
 BuildRequires:	/usr/bin/php
 Requires:	php-gettext
@@ -82,6 +83,7 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 sed -ne '/global $wp_queries;/,/WP_FIRST_INSTALL$/p' wp-admin/includes/schema.php > wp-admin/includes/schema-wp_queries.php
 sed -i -e '/global $wp_queries;/,/WP_FIRST_INSTALL$/d' wp-admin/includes/schema.php
 %patch1 -p1
+%patch2 -p1
 
 %build
 php -l wp-admin/includes/schema.php
@@ -92,7 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/{languages,blogs.dir}}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
-cp -a $RPM_BUILD_ROOT{%{_appdir}/wp-config-sample.php,%{_sysconfdir}/wp-config.php}
+touch $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 cp -a $RPM_BUILD_ROOT%{_sysconfdir}/{apache,httpd}.conf

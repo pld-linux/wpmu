@@ -1,0 +1,123 @@
+--- wordpress-mu-2.8.6/wp-admin/setup-config.php~	2009-11-26 21:15:41.000000000 +0200
++++ wordpress-mu-2.8.6/wp-admin/setup-config.php	2009-12-07 21:48:53.335423259 +0200
+@@ -24,6 +24,7 @@
+ define('ABSPATH', dirname(dirname(__FILE__)).'/');
+ define('WPINC', 'wp-includes');
+ define('WP_CONTENT_DIR', ABSPATH . 'wp-content');
++define('WP_CONFIG_DIR', '/etc/webapps/wordpress-mu/');
+ /**#@-*/
+ 
+ require_once(ABSPATH . WPINC . '/compat.php');
+@@ -35,11 +36,8 @@
+ 
+ $configFile = file(ABSPATH . 'wp-config-sample.php');
+ 
+-if ( !is_writable(ABSPATH))
+-	wp_die("Sorry, I can't write to the directory. You'll have to either change the permissions on your WordPress directory or create your wp-config.php manually.");
+-
+ // Check if wp-config.php has been created
+-if (file_exists(ABSPATH . 'wp-config.php'))
++if (file_exists(WP_CONFIG_DIR. 'wp-config.php') && filesize(WP_CONFIG_DIR. 'wp-config.php'))
+ 	wp_die("<p>The file 'wp-config.php' already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href='install.php'>installing now</a>.</p>");
+ 
+ // Check if wp-config.php exists above the root directory but is not part of another install
+@@ -155,7 +153,7 @@
+ 	if ( !empty($wpdb->error) )
+ 		wp_die($wpdb->error->get_error_message());
+ 
+-	$handle = fopen(ABSPATH . 'wp-config.php', 'w');
++	$handle = fopen(WP_CONFIG_DIR. 'wp-config.php', 'w');
+ 
+ 	foreach ($configFile as $line_num => $line) {
+ 		switch (substr($line,0,16)) {
+@@ -179,7 +177,6 @@
+ 		}
+ 	}
+ 	fclose($handle);
+-	chmod(ABSPATH . 'wp-config.php', 0666);
+ 
+ 	display_header();
+ ?>
+--- wordpress-mu-2.8.6/index-install.php~	2009-11-26 21:15:41.000000000 +0200
++++ wordpress-mu-2.8.6/index-install.php	2009-12-07 21:57:20.321942364 +0200
+@@ -465,7 +465,7 @@
+ 	require_once('wp-includes/wp-db.php');
+ 	printheader();
+ 
+-	$handle = fopen('wp-config.php', 'w');
++	$handle = fopen('/etc/webapps/wordpress-mu/wp-config.php', 'w');
+ 
+ 	foreach ($wp_config_file as $line) {
+ 		switch ( trim( substr($line,0,16) ) ) {
+@@ -510,7 +510,6 @@
+ 		}
+ 	}
+ 	fclose($handle);
+-	chmod('wp-config.php', 0644);
+ 	define( 'VHOST', $vhost );
+ }
+ 
+@@ -704,7 +703,7 @@
+ 		step2();
+ 
+ 		// Install Blog!
+-		include_once('./wp-config.php');
++		include_once('/etc/webapps/wordpress-mu/wp-config.php');
+ 		include_once('./wp-admin/includes/upgrade.php');
+ 		
+ 		$_SERVER[ 'HTTP_HOST' ] = str_replace( 'www.', '', $_SERVER[ 'HTTP_HOST' ] ); // normalise hostname - no www.
+--- wordpress-mu-2.8.6/wp-admin/includes/mu.php~	2009-11-26 21:15:41.000000000 +0200
++++ wordpress-mu-2.8.6/wp-admin/includes/mu.php	2009-12-07 21:50:50.055311408 +0200
+@@ -687,7 +687,7 @@
+ 			$out .= "define( '$key', '" . wp_generate_password() . wp_generate_password() . "' );<br />";
+ 	}
+ 	if( $out != '' ) {
+-		$msg = sprintf( __( 'Warning! WordPress encrypts user cookies, but you must add the following lines to <strong>%swp-config.php</strong> for it to be more secure.<br />Please add the code before the line, <code>/* That\'s all, stop editing! Happy blogging. */</code>' ), ABSPATH );
++		$msg = sprintf( __( 'Warning! WordPress encrypts user cookies, but you must add the following lines to <strong>%swp-config.php</strong> for it to be more secure.<br />Please add the code before the line, <code>/* That\'s all, stop editing! Happy blogging. */</code>' ), WP_CONFIG_DIR);
+ 		$msg .= "<blockquote>$out</blockquote>";
+ 
+ 		echo "<div id='update-nag'>$msg</div>";
+--- wordpress-mu-2.8.6/wp-blog-header.php~	2009-12-07 21:52:41.000000000 +0200
++++ wordpress-mu-2.8.6/wp-blog-header.php	2009-12-07 21:52:43.755301786 +0200
+@@ -7,7 +7,8 @@
+ 
+ if ( !isset($wp_did_header) ) {
+ 	// WPMU Runs installer if things aren't set up correctly
+-	if ( !file_exists( dirname(__FILE__) . '/wp-config.php') && !file_exists( dirname( dirname(__FILE__) ) . '/wp-config.php')) {
++	if (!filesize('/etc/webapps/wordpress-mu/wp-config.php') &&
++	   	!file_exists( dirname(__FILE__) . '/wp-config.php') && !file_exists( dirname( dirname(__FILE__) ) . '/wp-config.php')) {
+ 		if (strpos($_SERVER['PHP_SELF'], 'wp-admin') !== false) $path = '';
+ 		else $path = 'wp-admin/';
+ 		// install WPMU!
+--- wordpress-mu-2.8.6/wp-load.php~	2009-11-26 21:15:41.000000000 +0200
++++ wordpress-mu-2.8.6/wp-load.php	2009-12-07 21:55:27.875280644 +0200
+@@ -18,13 +18,17 @@
+ 
+ /** Define ABSPATH as this files directory */
+ define( 'ABSPATH', dirname(__FILE__) . '/' );
++define( 'WP_CONFIG_DIR', '/etc/webapps/wordpress-mu/' );
+ 
+ if ( defined('E_RECOVERABLE_ERROR') )
+ 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR);
+ else
+ 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING);
+ 
+-if ( file_exists( ABSPATH . 'wp-config.php') ) {
++if ( file_exists( WP_CONFIG_DIR . 'wp-config.php') ) {
++	require_once( WP_CONFIG_DIR . 'wp-config.php' );
++
++} elseif ( file_exists( ABSPATH . 'wp-config.php') ) {
+ 
+ 	/** The config file resides in ABSPATH */
+ 	require_once( ABSPATH . 'wp-config.php' );
+--- wordpress-mu/wp-config-sample.php~	2009-12-07 22:01:40.038791828 +0200
++++ wordpress-mu/wp-config-sample.php	2009-12-07 22:02:21.025313883 +0200
+@@ -107,7 +107,7 @@
+ 
+ /** WordPress absolute path to the Wordpress directory. */
+ if ( !defined('ABSPATH') )
+-	define('ABSPATH', dirname(__FILE__) . '/');
++	define('ABSPATH', '/usr/share/wordpress-mu/');
+ 
+ /** Sets up WordPress vars and included files. */
+ require_once(ABSPATH . 'wp-settings.php');
