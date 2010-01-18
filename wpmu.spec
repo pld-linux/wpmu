@@ -2,12 +2,12 @@
 # - gettext mo to system dir, add all possible languages?
 Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
-Name:		wordpress-mu
+Name:		wpmu
 Version:	2.8.6
-Release:	0.36
+Release:	0.38
 License:	GPL
 Group:		Applications/Publishing
-Source0:	http://mu.wordpress.org/%{name}-%{version}.tar.gz
+Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
 # Source0-md5:	dfa27af33afe0c206933e509edd5835c
 URL:		http://mu.wordpress.org/
 Source1:	apache.conf
@@ -23,6 +23,7 @@ Requires:	php-xml
 Requires:	php-xmlrpc
 Requires:	webapps
 Requires:	webserver(php) >= 5.0
+Obsoletes:	wordpress-mu
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -45,6 +46,7 @@ Summary(en.UTF-8):	Wordpress µ setup package
 Summary(pl.UTF-8):	Pakiet do wstępnej konfiguracji Wordpress
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	wordpress-mu-setup
 
 %description setup
 Install this package to configure initial WordPress MU installation.
@@ -63,7 +65,7 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
 %prep
 %setup -qc
-mv %{name}/* .; rmdir %{name}
+mv wordpress-mu/* .; rmdir wordpress-mu
 # undos
 find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
 

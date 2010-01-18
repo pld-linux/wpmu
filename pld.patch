@@ -55,7 +55,7 @@
 +		if (include("index-install.php")) {
 +			exit;
 +		}
-+		die('Please install <code>wordpress-mu-setup</code> package to run install wizard');
++		die('Please install <code>wpmu-setup</code> package to run install wizard');
  	}
  
  	$wp_did_header = true;

@@ -4,7 +4,7 @@
  define('ABSPATH', dirname(dirname(__FILE__)).'/');
  define('WPINC', 'wp-includes');
  define('WP_CONTENT_DIR', ABSPATH . 'wp-content');
-+define('WP_CONFIG_DIR', '/etc/webapps/wordpress-mu/');
++define('WP_CONFIG_DIR', '/etc/webapps/wpmu/');
  /**#@-*/
  
  require_once(ABSPATH . WPINC . '/compat.php');
@@ -45,7 +45,7 @@
  	printheader();
  
 -	$handle = fopen('wp-config.php', 'w');
-+	$handle = fopen('/etc/webapps/wordpress-mu/wp-config.php', 'w');
++	$handle = fopen('/etc/webapps/wpmu/wp-config.php', 'w');
  
  	foreach ($wp_config_file as $line) {
  		switch ( trim( substr($line,0,16) ) ) {
@@ -62,7 +62,7 @@
  
  		// Install Blog!
 -		include_once('./wp-config.php');
-+		include_once('/etc/webapps/wordpress-mu/wp-config.php');
++		include_once('/etc/webapps/wpmu/wp-config.php');
  		include_once('./wp-admin/includes/upgrade.php');
  		
  		$_SERVER[ 'HTTP_HOST' ] = str_replace( 'www.', '', $_SERVER[ 'HTTP_HOST' ] ); // normalise hostname - no www.
@@ -84,7 +84,7 @@
  if ( !isset($wp_did_header) ) {
  	// WPMU Runs installer if things aren't set up correctly
 -	if ( !file_exists( dirname(__FILE__) . '/wp-config.php') && !file_exists( dirname( dirname(__FILE__) ) . '/wp-config.php')) {
-+	if (!filesize('/etc/webapps/wordpress-mu/wp-config.php') &&
++	if (!filesize('/etc/webapps/wpmu/wp-config.php') &&
 +	   	!file_exists( dirname(__FILE__) . '/wp-config.php') && !file_exists( dirname( dirname(__FILE__) ) . '/wp-config.php')) {
  		if (strpos($_SERVER['PHP_SELF'], 'wp-admin') !== false) $path = '';
  		else $path = 'wp-admin/';
@@ -95,7 +95,7 @@
  
  /** Define ABSPATH as this files directory */
  define( 'ABSPATH', dirname(__FILE__) . '/' );
-+define( 'WP_CONFIG_DIR', '/etc/webapps/wordpress-mu/' );
++define( 'WP_CONFIG_DIR', '/etc/webapps/wpmu/' );
  
  if ( defined('E_RECOVERABLE_ERROR') )
  	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR);
