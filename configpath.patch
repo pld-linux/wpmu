@@ -117,7 +117,7 @@
  /** WordPress absolute path to the Wordpress directory. */
  if ( !defined('ABSPATH') )
 -	define('ABSPATH', dirname(__FILE__) . '/');
-+	define('ABSPATH', '/usr/share/wordpress-mu/');
++	define('ABSPATH', '/usr/share/wpmu/');
  
  /** Sets up WordPress vars and included files. */
  require_once(ABSPATH . 'wp-settings.php');
