@@ -43,12 +43,12 @@
  		<code>chmod&nbsp;755&nbsp;
  			<?php
  			reset( $dirs );
---- wordpress-mu-2.8.6/wp-blog-header.php	2009-11-19 17:28:48.952408338 +0200
-+++ wordpress-mu-2.8.6.pld/wp-blog-header.php	2009-11-19 17:28:33.183056898 +0200
-@@ -10,8 +10,11 @@
- 	if ( !file_exists( dirname(__FILE__) . '/wp-config.php') && !file_exists( dirname( dirname(__FILE__) ) . '/wp-config.php')) {
- 		if (strpos($_SERVER['PHP_SELF'], 'wp-admin') !== false) $path = '';
- 		else $path = 'wp-admin/';
+--- wpmu-2.9.1.1/wp-blog-header.php~	2010-01-21 20:33:19.000000000 +0200
++++ wpmu-2.9.1.1/wp-blog-header.php	2010-01-21 20:34:06.891503135 +0200
+@@ -22,8 +22,11 @@
+ 			$path = 'wp-admin/';
+ 		}
+ 
 -		include( "index-install.php" ); // install WPMU!
 -		die();
 +		// install WPMU!
@@ -58,4 +58,4 @@
 +		die('Please install <code>wpmu-setup</code> package to run install wizard');
  	}
  
- 	$wp_did_header = true;
+ }

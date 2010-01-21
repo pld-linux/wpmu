@@ -1,14 +1,15 @@
 # TODO
 # - gettext mo to system dir, add all possible languages?
+# - system tinymce, jquery, codepress, scriptaculos, prototype
 Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
-Version:	2.8.6
-Release:	0.40
+Version:	2.9.1.1
+Release:	0.42
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
-# Source0-md5:	dfa27af33afe0c206933e509edd5835c
+# Source0-md5:	85ffe0c80032257e99ca65c8fe978d3a
 URL:		http://mu.wordpress.org/
 Source1:	apache.conf
 Patch0:		pld.patch
@@ -78,6 +79,9 @@ rm wp-content/plugins/index.php
 rm wp-content/plugins/readme.txt
 rm wp-content/index.php
 
+# remove *.dev.js
+find -name *.dev.js | xargs rm -v
+
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
@@ -86,6 +90,9 @@ sed -ne '/global $wp_queries;/,/WP_FIRST_INSTALL$/p' wp-admin/includes/schema.ph
 sed -i -e '/global $wp_queries;/,/WP_FIRST_INSTALL$/d' wp-admin/includes/schema.php
 %patch1 -p1
 %patch2 -p1
+
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %build
 php -l wp-admin/includes/schema.php
