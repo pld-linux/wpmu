@@ -79,8 +79,9 @@ rm wp-content/plugins/index.php
 rm wp-content/plugins/readme.txt
 rm wp-content/index.php
 
-# remove *.dev.js
+# remove *.dev js/.css
 find -name *.dev.js | xargs rm -v
+find -name *.dev.css | xargs rm -v
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
