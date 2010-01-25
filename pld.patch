@@ -1,5 +1,14 @@
---- wordpress-mu-2.8.6/index-install.php	2009-11-19 17:28:48.623647566 +0200
-+++ wordpress-mu-2.8.6.pld/index-install.php	2009-11-19 17:28:33.183056898 +0200
+--- wordpress-mu-2.8.6.pld/index-install.php	2009-11-19 17:28:33.183056898 +0200
++++ wpmu-2.9.1.1/index-install.php	2010-01-25 19:09:32.900783117 +0200
+@@ -12,7 +12,7 @@
+ define('WP_INSTALLING', true);
+ define('WP_FIRST_INSTALL', true);
+ 
+-$dirs = array( dirname(__FILE__), dirname(__FILE__) . "/wp-content/" );
++$dirs = array();
+ 
+ function printheader() {
+ 	?>
 @@ -288,10 +288,16 @@
  		<h2>Warning!</h2>
  		<div style='border: 1px solid #ccc'>
@@ -19,7 +28,30 @@
  		foreach( $errors as $dir ) {
  			echo "$dir&nbsp;";
  		}
-@@ -359,7 +365,7 @@
+@@ -311,6 +317,22 @@
+ 		<?php
+ 		$return = false;
+ 	}
++
++	if (!file_exists("/etc/webapps/wpmu/wp-config.php" ) || !is_writable("/etc/webapps/wpmu/wp-config.php")) {
++		?>
++		<h2>Warning! wp-config.php not writable.</h2>
++		<div style='border: 1px solid #ccc'>
++			<p style='font-weight: bold; padding-left: 10px'>/etc/webapps/wpmu/wp-config.php is not writable by the webserver!<br />
++			<p>Quick fix:<br />
++			<code>chgrp&nbsp;http&nbsp;/etc/webapps/wpmu/wp-config.php<br/>
++			</code>
++			<code>chmod&nbsp;g+w&nbsp;/etc/webapps/wpmu/wp-config.php
++			</code>
++			</p>
++		</div>
++		<?php
++		$return = false;
++	}
+ 	
+ 	return $return;
+ }
+@@ -359,7 +381,7 @@
  	return true;
  }
  
@@ -28,7 +60,17 @@
  	$weblog_title = ucfirst( $_SERVER[ 'HTTP_HOST' ] ) . ' Blogs';
  	$email = '';
  	$hostname = $_SERVER[ 'HTTP_HOST' ];
-@@ -630,6 +636,14 @@
+@@ -618,8 +640,8 @@
+ 		}
+ 	}
+ 
++	if (!empty($dirs)) {
+ 	?>
+-	
+ 	<h3>Directory Permissions</h3>
+ 	<p>Please remember to reset the permissions on the following directories:
+ 		<ul>
+@@ -630,6 +652,14 @@
  	</p>
  	<p>You can probably use the following command to fix the permissions but check with your host if it doubt:
  		<br />
@@ -43,6 +85,24 @@
  		<code>chmod&nbsp;755&nbsp;
  			<?php
  			reset( $dirs );
+@@ -642,6 +672,8 @@
+ 			?>
+ 		</code>
+ 	</p>
++	<? } ?>
++
+ 	<h3>Delete the Installer</h3>
+ 	<p>Now that you've installed WordPress &micro;, you don't need the installer any more. You can safely delete <em>index-install.php</em> now. It's always a good idea to remove code and scripts you don't need.</p>
+ 	
+@@ -702,7 +734,7 @@
+ 		make_db_current_silent();
+ 		populate_options();
+ 		global $base;
+-		do_htaccess( 'htaccess.dist', '.htaccess', $base, '');
++		//do_htaccess( 'htaccess.dist', '.htaccess', $base, '');
+ 		
+ 		step3();
+ 	break;
 --- wpmu-2.9.1.1/wp-blog-header.php~	2010-01-21 20:33:19.000000000 +0200
 +++ wpmu-2.9.1.1/wp-blog-header.php	2010-01-21 20:34:06.891503135 +0200
 @@ -22,8 +22,11 @@
