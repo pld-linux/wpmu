@@ -70,15 +70,18 @@
  		$msg .= "<blockquote>$out</blockquote>";
  
  		echo "<div id='update-nag'>$msg</div>";
---- wpmu-2.9.1.1/wp-blog-header.php~	2010-01-21 21:00:31.000000000 +0200
-+++ wpmu-2.9.1.1/wp-blog-header.php	2010-01-21 21:01:27.924672241 +0200
-@@ -7,7 +7,8 @@
+--- wpmu/wp-blog-header.php~	2010-01-25 18:48:53.000000000 +0200
++++ wpmu/wp-blog-header.php	2010-01-25 18:50:13.104232987 +0200
+@@ -7,7 +7,11 @@
  
  if ( !isset($wp_did_header) ) {
  	// WPMU Runs installer if things aren't set up correctly
 -	if ( file_exists( dirname(__FILE__) . '/wp-config.php' ) || ( file_exists( dirname( dirname(__FILE__) ) . '/wp-config.php' ) && ! file_exists( dirname( dirname(__FILE__) ) . '/wp-settings.php' ) ) ) {
-+	if (!filesize('/etc/webapps/wpmu/wp-config.php') &&
-+	   	!file_exists( dirname(__FILE__) . '/wp-config.php') && !file_exists( dirname( dirname(__FILE__) ) . '/wp-config.php')) {
++	if (
++		filesize('/etc/webapps/wpmu/wp-config.php') ||
++		file_exists(dirname(__FILE__) . '/wp-config.php') ||
++		(file_exists(dirname(dirname(__FILE__) ) . '/wp-config.php') && !file_exists(dirname(dirname(__FILE__)) . '/wp-settings.php'))
++   	) {
  		$wp_did_header = true;
  
  		require_once( dirname(__FILE__) . '/wp-load.php' );
