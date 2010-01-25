@@ -1,6 +1,8 @@
 # TODO
 # - gettext mo to system dir, add all possible languages?
-# - system tinymce, jquery, codepress, scriptaculos, prototype
+# - system jquery, scriptaculos, prototype, swfobject 2.1
+# - no system codepress 0.9.6: codepress.js is modified
+# - no system tinymce 3.2.7: themes and "inlinepopups", "media", "paste" plugins are modified
 Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
@@ -17,6 +19,7 @@ Patch1:		wp_queries.patch
 Patch2:		configpath.patch
 Source2:	lighttpd.conf
 BuildRequires:	/usr/bin/php
+Requires:	js-swfobject >= 2.1
 Requires:	php-gettext
 Requires:	php-mysql
 Requires:	php-pcre
@@ -82,6 +85,9 @@ rm wp-content/index.php
 # remove *.dev js/.css
 find -name *.dev.js | xargs rm -v
 find -name *.dev.css | xargs rm -v
+
+# system swfobject
+rm wp-includes/js/swfobject.js
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
