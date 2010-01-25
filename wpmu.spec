@@ -5,7 +5,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
 Version:	2.9.1.1
-Release:	0.42
+Release:	0.49
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
@@ -107,7 +107,7 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 cp -a $RPM_BUILD_ROOT%{_sysconfdir}/{apache,httpd}.conf
-rm $RPM_BUILD_ROOT%{_appdir}/{README.txt,license.txt}
+rm $RPM_BUILD_ROOT%{_appdir}/{README.txt,license.txt,htaccess.dist}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -175,6 +175,9 @@ fi
 %{_appdir}/wp-content/themes/default
 %{_appdir}/wp-content/themes/home
 
+# needed for daily moderation
+%{_appdir}/wp-admin
+
 %attr(775,root,http) /var/lib/wpmu
 
 # -setup package
@@ -183,11 +186,5 @@ fi
 
 %files setup
 %defattr(644,root,root,755)
-#%attr(755,root,root) %{_sbindir}/wpmu-secure
-#%attr(755,root,root) %{_sbindir}/wpmu-setup
-#%{_appdir}/wp-secure.sh
-#%{_appdir}/wp-setup.sh
-%{_appdir}/htaccess.dist
 %{_appdir}/index-install.php
 %{_appdir}/wp-config-sample.php
-%{_appdir}/wp-admin
