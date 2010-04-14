@@ -6,12 +6,12 @@
 Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
-Version:	2.9.1.1
-Release:	0.49
+Version:	2.9.2
+Release:	0.50
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
-# Source0-md5:	85ffe0c80032257e99ca65c8fe978d3a
+# Source0-md5:	3dff1dd886414ef80ffddba7a33172bf
 URL:		http://mu.wordpress.org/
 Source1:	apache.conf
 Patch0:		pld.patch
