@@ -10,7 +10,7 @@ Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
 Version:	2.9.2
 Release:	1
-License:	GPL
+License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
 # Source0-md5:	3dff1dd886414ef80ffddba7a33172bf
