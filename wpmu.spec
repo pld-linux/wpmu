@@ -73,7 +73,9 @@ Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
 
 %description theme-default
-Wordpress MU default theme
+WordPress Default by Michael Heilemann
+
+The default WordPress theme based on the famous Kubrick.
 
 %package theme-classic
 Summary:	Wordpress MU classic theme
@@ -81,7 +83,9 @@ Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
 
 %description theme-classic
-Wordpress MU classic theme
+WordPress Classic by Dave Shea
+
+The original WordPress theme that graced versions 1.2.x and prior.
 
 %package theme-home
 Summary:	Wordpress MU home theme
@@ -89,7 +93,9 @@ Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
 
 %description theme-home
-Wordpress MU home theme
+WordPress mu Homepage by Michael Heilemann
+
+WordPress mu homepage theme based on the famous Kubrick.
 
 %prep
 %setup -qc
