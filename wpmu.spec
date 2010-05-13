@@ -20,13 +20,14 @@ Patch2:		configpath.patch
 Source2:	lighttpd.conf
 BuildRequires:	/usr/bin/php
 Requires:	js-swfobject >= 2.1
+Requires:	php-common >= 4:5.0
 Requires:	php-gettext
 Requires:	php-mysql
 Requires:	php-pcre
 Requires:	php-xml
 Requires:	php-xmlrpc
 Requires:	webapps
-Requires:	webserver(php) >= 5.0
+Requires:	webserver(php)
 Obsoletes:	wordpress-mu
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
