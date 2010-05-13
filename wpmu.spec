@@ -7,7 +7,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
 Version:	2.9.2
-Release:	0.50
+Release:	0.51
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
@@ -66,6 +66,30 @@ insecure to keep the setup files in place.
 Ten pakiet należy zainstalować w celu wstępnej konfiguracji WordPress
 MU po pierwszej instalacji. Potem należy go odinstalować, jako że
 pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
+
+%package theme-default
+Summary:	Wordpress MU default theme
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description theme-default
+Wordpress MU default theme
+
+%package theme-classic
+Summary:	Wordpress MU classic theme
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description theme-classic
+Wordpress MU classic theme
+
+%package theme-home
+Summary:	Wordpress MU home theme
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description theme-home
+Wordpress MU home theme
 
 %prep
 %setup -qc
@@ -178,9 +202,6 @@ fi
 %dir %{_appdir}/wp-content/mu-plugins
 
 %dir %{_appdir}/wp-content/themes
-%{_appdir}/wp-content/themes/classic
-%{_appdir}/wp-content/themes/default
-%{_appdir}/wp-content/themes/home
 
 # needed for daily moderation
 %{_appdir}/wp-admin
@@ -195,3 +216,15 @@ fi
 %defattr(644,root,root,755)
 %{_appdir}/index-install.php
 %{_appdir}/wp-config-sample.php
+
+%files theme-default
+%defattr(644,root,root,755)
+%{_appdir}/wp-content/themes/default
+
+%files theme-classic
+%defattr(644,root,root,755)
+%{_appdir}/wp-content/themes/classic
+
+%files theme-home
+%defattr(644,root,root,755)
+%{_appdir}/wp-content/themes/home
