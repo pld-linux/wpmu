@@ -23,6 +23,7 @@ Patch0:		pld.patch
 Patch1:		wp_queries.patch
 Patch2:		configpath.patch
 BuildRequires:	/usr/bin/php
+BuildRequires:	rpm-php-pearprov
 Requires:	js-swfobject >= 2.1
 Requires:	php-common >= 4:%{php_min_version}
 Requires:	php-gettext
