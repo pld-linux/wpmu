@@ -23,6 +23,7 @@ Patch0:		pld.patch
 Patch1:		wp_queries.patch
 Patch2:		configpath.patch
 Patch3:		simplepie.patch
+Patch4:		rss_post_author.patch
 BuildRequires:	/usr/bin/php
 BuildRequires:	rpm-php-pearprov
 Requires:	js-swfobject >= 2.1
@@ -147,6 +148,7 @@ sed -i -e '/global $wp_queries;/,/WP_FIRST_INSTALL$/d' wp-admin/includes/schema.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
