@@ -9,7 +9,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
 Version:	2.9.2
-Release:	1.2
+Release:	1.3
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
@@ -24,6 +24,7 @@ Patch1:		wp_queries.patch
 Patch2:		configpath.patch
 Patch3:		simplepie.patch
 Patch4:		rss_post_author.patch
+Patch5:		pear-text-diff.patch
 BuildRequires:	/usr/bin/php
 BuildRequires:	rpm-php-pearprov
 Requires:	js-swfobject >= 2.1
@@ -31,6 +32,7 @@ Requires:	php-common >= 4:%{php_min_version}
 Requires:	php-gettext
 Requires:	php-mysql
 Requires:	php-pcre
+Requires:	php-pear-Text_Diff
 Requires:	php-simplepie >= 1.2
 Requires:	php-xml
 Requires:	webapps
@@ -139,6 +141,10 @@ rm wp-includes/js/swfobject.js
 # system simplepie
 rm wp-includes/class-simplepie.php
 
+# system php-pear-Text_Diff
+rm -rf wp-includes/Text/Diff*
+rmdir wp-includes/Text
+
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
@@ -149,6 +155,7 @@ sed -i -e '/global $wp_queries;/,/WP_FIRST_INSTALL$/d' wp-admin/includes/schema.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f

@@ -1,0 +1,17 @@
+--- wpmu/wp-includes/wp-diff.php	2010-04-14 16:12:46.000000000 +0300
++++ wpmu/wp-includes/wp-diff.php	2010-05-20 12:48:55.452984888 +0300
+@@ -10,11 +10,11 @@
+ 
+ if ( !class_exists( 'Text_Diff' ) ) {
+ 	/** Text_Diff class */
+-	require( dirname(__FILE__).'/Text/Diff.php' );
++	require_once 'Text/Diff.php';
+ 	/** Text_Diff_Renderer class */
+-	require( dirname(__FILE__).'/Text/Diff/Renderer.php' );
++	require_once 'Text/Diff/Renderer.php';
+ 	/** Text_Diff_Renderer_inline class */
+-	require( dirname(__FILE__).'/Text/Diff/Renderer/inline.php' );
++	require_once 'Text/Diff/Renderer/inline.php';
+ }
+ 
+ /**
