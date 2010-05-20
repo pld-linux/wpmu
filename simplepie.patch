@@ -1,0 +1,18 @@
+--- wpmu-2.9.2/./wp-includes/class-feed.php~	2010-05-14 18:04:07.000000000 +0300
++++ wpmu-2.9.2/./wp-includes/class-feed.php	2010-05-19 17:07:27.696746340 +0300
+@@ -1,7 +1,7 @@
+ <?php
+ 
+ if ( !class_exists('SimplePie') )
+-	require_once (ABSPATH . WPINC . '/class-simplepie.php');
++	require_once 'simplepie.inc'
+ 
+ class WP_Feed_Cache extends SimplePie_Cache {
+ 	/**
+@@ -100,4 +100,4 @@
+ 			}
+ 		}
+ 	}
+-}
+\ No newline at end of file
++}
