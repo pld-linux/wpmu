@@ -1,0 +1,13 @@
+--- wpmu/wp-admin/import/rss.php~	2010-05-13 14:29:32.000000000 +0300
++++ wpmu/wp-admin/import/rss.php	2010-05-20 12:42:32.000000000 +0300
+@@ -111,7 +111,9 @@
+ 			$post_content = str_replace('<br>', '<br />', $post_content);
+ 			$post_content = str_replace('<hr>', '<hr />', $post_content);
+ 
+-			$post_author = 1;
++			preg_match('|<dc:creator>(.*?)</dc:creator>|is', $post, $post_authors);
++			$post_author = $post_authors[1];
++
+ 			$post_status = 'publish';
+ 			$this->posts[$index] = compact('post_author', 'post_date', 'post_date_gmt', 'post_content', 'post_title', 'post_status', 'guid', 'categories');
+ 			$index++;

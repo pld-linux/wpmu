@@ -9,7 +9,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
 Version:	2.9.2
-Release:	1
+Release:	1.2
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
@@ -151,7 +151,7 @@ php -l wp-admin/includes/schema-wp_queries.php
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/languages,/var/lib/wpmu}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_sbindir},%{_sysconfdir},%{_appdir}/wp-content/languages,/var/{lib,log}/wpmu}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
 touch $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
@@ -229,6 +229,7 @@ fi
 %{_appdir}/wp-admin
 
 %attr(775,root,http) /var/lib/wpmu
+%attr(775,root,http) /var/log/wpmu
 
 # -setup package
 %exclude %{_appdir}/index-install.php

@@ -117,8 +117,17 @@
  
  /** Sets up WordPress vars and included files. */
  require_once(ABSPATH . 'wp-settings.php');
---- wordpress-mu/wp-settings.php~	2009-12-07 22:02:50.000000000 +0200
-+++ wordpress-mu/wp-settings.php	2009-12-07 22:25:35.955516316 +0200
+--- wordpress-mu/wp-settings.php	2009-12-07 22:25:35.955516316 +0200
++++ wpmu/wp-settings.php	2010-05-14 16:25:49.000000000 +0300
+@@ -212,7 +212,7 @@
+ 	// Add define('WP_DEBUG_LOG', true); to enable php debug logging to WP_CONTENT_DIR/debug.log
+ 	if ( defined('WP_DEBUG_LOG') && WP_DEBUG_LOG ) {
+ 		ini_set('log_errors', 1);
+-		ini_set('error_log', WP_CONTENT_DIR . '/debug.log');
++		ini_set('error_log', '/var/log/wpmu/debug.log');
+ 	}
+ } else {
+ 	define('WP_DEBUG', false);
 @@ -322,13 +322,13 @@
  }
  
