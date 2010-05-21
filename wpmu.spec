@@ -9,7 +9,7 @@ Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
 Name:		wpmu
 Version:	2.9.2
-Release:	1.3
+Release:	1.4
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://mu.wordpress.org/wordpress-mu-%{version}.tar.gz
@@ -25,9 +25,11 @@ Patch2:		configpath.patch
 Patch3:		simplepie.patch
 Patch4:		rss_post_author.patch
 Patch5:		pear-text-diff.patch
+Patch6:		atomlib.patch
 BuildRequires:	/usr/bin/php
 BuildRequires:	rpm-php-pearprov
 Requires:	js-swfobject >= 2.1
+Requires:	php-atomlib >= 0.4
 Requires:	php-common >= 4:%{php_min_version}
 Requires:	php-gettext
 Requires:	php-mysql
@@ -156,6 +158,7 @@ sed -i -e '/global $wp_queries;/,/WP_FIRST_INSTALL$/d' wp-admin/includes/schema.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
