@@ -3,7 +3,6 @@
 # - system jquery, scriptaculos, prototype, swfobject 2.1
 # - no system codepress 0.9.6: codepress.js is modified
 # - no system tinymce 3.2.7: themes and "inlinepopups", "media", "paste" plugins are modified
-%include	/usr/lib/rpm/macros.php
 %define		php_min_version 5.2.1
 Summary:	WordPress MU
 Summary(en.UTF-8):	WordPress µ
