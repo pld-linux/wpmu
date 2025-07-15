@@ -123,7 +123,7 @@ mv wordpress-mu/* .; rmdir wordpress-mu
 # undos
 find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
 
-%patch0 -p1
+%patch -P0 -p1
 
 rm wp-content/themes/index.php
 rm wp-content/mu-plugins/index.php
@@ -152,12 +152,12 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 # Extract $wp_queries to separate file so these could be re-loaded when blog changes
 sed -ne '/global $wp_queries;/,/WP_FIRST_INSTALL$/p' wp-admin/includes/schema.php > wp-admin/includes/schema-wp_queries.php
 sed -i -e '/global $wp_queries;/,/WP_FIRST_INSTALL$/d' wp-admin/includes/schema.php
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
